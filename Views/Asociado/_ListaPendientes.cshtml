@@ -1,0 +1,30 @@
+﻿@model List<CSM_Registro.Models.Asociado>
+
+@if (!Model.Any())
+{
+    <p>No hay registros.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr><th>Nombre</th><th>DNI</th><th>Fecha Registro</th>Vaucher</tr>
+        </thead>
+        <tbody>
+            @foreach (var a in Model)
+            {
+                <tr>
+                    <td>@a.NombreAsociado</td>
+                    <td>@a.Dni</td>
+                    <td>@a.FechaRegistro.ToShortDateString()</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(a.FotoVoucher))
+                        {
+                            <img src="@a.FotoVoucher" alt="voucher" width="100" />
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

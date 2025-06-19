@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CSM-Registro")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2050d114f2615e0343fccc9c8052b163ff7bb920")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9561f7b7b27d0195a4b87509c7ccae34068dab0c")]
 [assembly: System.Reflection.AssemblyProductAttribute("CSM-Registro")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CSM-Registro")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,0 +1,61 @@
+﻿@model List<CSM_Registro.Models.Asociado>
+@{
+    var desde = ViewBag.Desde as DateTime? ?? DateTime.Now.AddMonths(-1);
+    var hasta = ViewBag.Hasta as DateTime? ?? DateTime.Now;
+    var paginaActual = (int?)ViewBag.PaginaActual ?? 1;
+    var totalPaginas = (int?)ViewBag.TotalPaginas ?? 0;
+}
+
+<h2>Filtrar Asociados Pendientes</h2>
+
+<form asp-action="Pendientes" method="post" class="mb-3">
+    <input type="hidden" name="pagina" value="1" />
+    <div class="row">
+        <div class="col-md-4">
+            <label>Desde:</label>
+            <input type="date" name="desde" class="form-control" value="@desde.ToString("yyyy-MM-dd")" required />
+        </div>
+        <div class="col-md-4">
+            <label>Hasta:</label>
+            <input type="date" name="hasta" class="form-control" value="@hasta.ToString("yyyy-MM-dd")" required />
+        </div>
+        <div class="col-md-4 mt-4">
+            <button class="btn btn-primary mt-2">Buscar</button>
+        </div>
+    </div>
+</form>
+
+@if (Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr><th>Nombre</th><th>DNI</th><th>Fecha Registro</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var a in Model)
+            {
+                <tr>
+                    <td>@a.NombreAsociado</td>
+                    <td>@a.Dni</td>
+                    <td>@a.FechaRegistro.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <nav>
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= totalPaginas; i++)
+            {
+                <li class="page-item @(i == paginaActual ? "active" : "")">
+                    <form asp-action="Pendientes" method="post" class="d-inline">
+                        <input type="hidden" name="desde" value="@desde.ToString("yyyy-MM-dd")" />
+                        <input type="hidden" name="hasta" value="@hasta.ToString("yyyy-MM-dd")" />
+                        <input type="hidden" name="pagina" value="@i" />
+                        <button type="submit" class="page-link">@i</button>
+                    </form>
+                </li>
+            }
+        </ul>
+    </nav>
+}
