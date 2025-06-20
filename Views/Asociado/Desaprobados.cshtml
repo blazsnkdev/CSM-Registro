@@ -1,0 +1,70 @@
+﻿@model List<CSM_Registro.Models.Asociado>
+@{
+    DateTime? desde = ViewBag.Desde as DateTime?;
+    DateTime? hasta = ViewBag.Hasta as DateTime?;
+    int paginaActual = (int?)ViewBag.PaginaActual ?? 1;
+    int totalPaginas = (int?)ViewBag.TotalPaginas ?? 0;
+}
+
+<h2>Filtrar Asociados Desaprobados</h2>
+
+<form asp-action="Desaprobados" method="post" class="mb-3">
+    <div class="row">
+        <div class="col-md-4">
+            <label>Desde:</label>
+            <input type="date" name="desde" class="form-control" value="@(desde?.ToString("yyyy-MM-dd") ?? "")" />
+        </div>
+        <div class="col-md-4">
+            <label>Hasta:</label>
+            <input type="date" name="hasta" class="form-control" value="@(hasta?.ToString("yyyy-MM-dd") ?? "")" />
+        </div>
+        <div class="col-md-4 mt-4">
+            <button class="btn btn-primary mt-2">Filtrar</button>
+        </div>
+    </div>
+</form>
+
+@if (Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr><th>Nombre</th><th>Apellidos</th><th>DNI</th><th>Fecha Registro</th><th>Acciones</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var a in Model)
+            {
+                <tr>
+                    <td>@a.NombreAsociado</td>
+                    <td>@a.ApellidoPaterno @a.ApellidoMaterno</td>
+                    <td>@a.Dni</td>
+                    <td>@a.FechaRegistro.ToShortDateString()</td>
+                    <td>
+                        <a asp-action="Detalle" asp-route-id="@a.Id">Ver</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <nav>
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= totalPaginas; i++)
+            {
+                <li class="page-item @(i == paginaActual ? "active" : "")">
+                    <form asp-action="Desaprobados" method="post" class="d-inline">
+                        @if (desde.HasValue)
+                        {
+                            <input type="hidden" name="desde" value="@desde.Value.ToString("yyyy-MM-dd")" />
+                        }
+                        @if (hasta.HasValue)
+                        {
+                            <input type="hidden" name="hasta" value="@hasta.Value.ToString("yyyy-MM-dd")" />
+                        }
+                        <input type="hidden" name="pagina" value="@i" />
+                        <button type="submit" class="page-link">@i</button>
+                    </form>
+                </li>
+            }
+        </ul>
+    </nav>
+}

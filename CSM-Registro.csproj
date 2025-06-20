@@ -7,4 +7,9 @@
     <RootNamespace>CSM_Registro</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+    <PackageReference Include="MongoDB.Driver" Version="3.4.0" />
+  </ItemGroup>
+
 </Project>

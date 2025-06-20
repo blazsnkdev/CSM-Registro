@@ -1,7 +1,35 @@
+using CSM_Registro.Data;
+using CSM_Registro.Data.Abstraccion;
+using CSM_Registro.Data.Repositories;
+using CSM_Registro.Services.Implementacion;
+using CSM_Registro.Services.Interface;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+
+
+builder.Services.Configure<MongoDbSettings>
+    (
+    builder.Configuration.GetSection("MongoDbSettings")
+    );
+
+builder.Services.AddSingleton<MongoDbRepositorio>();
+builder.Services.AddScoped<IMongoDb, MongoDbRepositorio>();
+builder.Services.AddScoped<IAsociadoService, AsociadoService>();
+
+
+
+
+
+
+
+
+
+
+
 
 var app = builder.Build();
 
@@ -22,6 +50,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Asociado}/{action=Registro}/{id?}");
 
 app.Run();
