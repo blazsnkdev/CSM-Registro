@@ -11,7 +11,13 @@ namespace CSM_Registro.Data.Abstraccion
 
         Task<List<Asociado>> GetByEstadoYFechasAsync(string estado, DateTime desde, DateTime hasta);
 
+        Task<Asociado> GetByIdAsync(string id);
+        Task<List<Asociado>> GetAllByEstadoAsync(string estado);
 
+        Task UpdateEstadoAprobadoAsync(string id);
+        Task UpdateEstadoDesaprobadoAsync(string id);
+
+        Task DeleteAsync(string id);
 
     }
 }

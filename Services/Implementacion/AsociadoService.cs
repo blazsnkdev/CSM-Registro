@@ -13,25 +13,17 @@ namespace CSM_Registro.Services.Implementacion
             _mongoDb = mongoDb;
         }
 
-        public async Task<List<Asociado>> ListarPorRangoFechas(DateTime inicio, DateTime fin)
-        {
-            return await _mongoDb.GetByFechaRegistroAsync(inicio, fin);
-        }
 
-
-        public async Task<List<Asociado>> ListarPorEstadoYFechas(string estado, DateTime desde, DateTime hasta)
-        {
-            return await _mongoDb.GetByEstadoYFechasAsync(estado, desde, hasta);
-        }
-
-
-
-
-        public async Task<List<Asociado>> ListarPendientesPaginado(DateTime desde, DateTime hasta, int pagina = 1)
+        public async Task<List<Asociado>> ListarPendientesPaginado(DateTime? desde, DateTime? hasta, int pagina = 1)
         {
             int tamañoPagina = 5;
+            var lista = await _mongoDb.GetAllByEstadoAsync("Pendiente");
 
-            var lista = await _mongoDb.GetByEstadoYFechasAsync("Pendiente", desde, hasta);
+            
+            if (desde.HasValue && hasta.HasValue)
+            {
+                lista = lista.Where(a => a.FechaRegistro.Date >= desde.Value.Date && a.FechaRegistro.Date <= hasta.Value.Date).ToList();
+            }
 
             var paginados = lista
                 .OrderByDescending(a => a.FechaRegistro)
@@ -43,14 +35,70 @@ namespace CSM_Registro.Services.Implementacion
         }
 
 
-        public async Task<int> ContarPendientes(DateTime desde, DateTime hasta)
+
+        public async Task<List<Asociado>> ListarAprobadosPaginado(DateTime? desde, DateTime? hasta, int pagina = 1)
         {
-            var lista = await _mongoDb.GetByEstadoYFechasAsync("Pendiente", desde, hasta);
-            return (int)Math.Ceiling((double)lista.Count / 5); // 5 por página
+            int tamañoPagina = 5;
+            var lista = await _mongoDb.GetAllByEstadoAsync("Aprobado");
+
+
+            if (desde.HasValue && hasta.HasValue)
+            {
+                lista = lista.Where(a => a.FechaRegistro.Date >= desde.Value.Date && a.FechaRegistro.Date <= hasta.Value.Date).ToList();
+            }
+
+            var paginados = lista
+                .OrderByDescending(a => a.FechaRegistro)
+                .Skip((pagina - 1) * tamañoPagina)
+                .Take(tamañoPagina)
+                .ToList();
+
+            return paginados;
+        }
+
+        public async Task<List<Asociado>> ListarDesaprobadosPaginado(DateTime? desde, DateTime? hasta, int pagina = 1)
+        {
+            int tamañoPagina = 5;
+            var lista = await _mongoDb.GetAllByEstadoAsync("Desaprobado");
+
+
+            if (desde.HasValue && hasta.HasValue)
+            {
+                lista = lista.Where(a => a.FechaRegistro.Date >= desde.Value.Date && a.FechaRegistro.Date <= hasta.Value.Date).ToList();
+            }
+
+            var paginados = lista
+                .OrderByDescending(a => a.FechaRegistro)
+                .Skip((pagina - 1) * tamañoPagina)
+                .Take(tamañoPagina)
+                .ToList();
+
+            return paginados;
         }
 
 
+        public async Task<int> ContarPendientes(DateTime? desde, DateTime? hasta)
+        {
+            var lista = await _mongoDb.GetAllByEstadoAsync("Pendiente");
 
+            if (desde.HasValue && hasta.HasValue)
+            {
+                lista = lista.Where(a => a.FechaRegistro.Date >= desde.Value.Date && a.FechaRegistro.Date <= hasta.Value.Date).ToList();
+            }
+
+            return (int)Math.Ceiling((double)lista.Count / 5);
+        }
+
+        public async Task<int> ContarAprobados(DateTime desde, DateTime hasta)
+        {
+            var lista = await _mongoDb.GetByEstadoYFechasAsync("Aprobado", desde, hasta);
+            return (int)Math.Ceiling((double)lista.Count / 5);
+        }
+        public async Task<int> ContarDesaprobados(DateTime desde, DateTime hasta)
+        {
+            var lista = await _mongoDb.GetByEstadoYFechasAsync("Desaprobado", desde, hasta);
+            return (int)Math.Ceiling((double)lista.Count / 5);
+        }
 
         public Task<List<Asociado>> ObtenerAsociados()
         {
@@ -82,8 +130,20 @@ namespace CSM_Registro.Services.Implementacion
             return true;
         }
 
+        public async Task<Asociado?> ObtenerAsociadoPorId(string id)
+        {
+            return await _mongoDb.GetByIdAsync(id);
+        }
 
+        public async Task AprobarAsociado(string id)
+        {
+            var seleccionado = _mongoDb.GetByIdAsync(id);
+            await _mongoDb.UpdateEstadoAprobadoAsync(id);
+        }
 
-
+        public Task DesaprobarAsociado(string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

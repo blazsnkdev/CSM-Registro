@@ -6,9 +6,9 @@
     int totalPaginas = (int?)ViewBag.TotalPaginas ?? 0;
 }
 
-<h2>Filtrar Asociados Pendientes</h2>
+<h2>Filtrar Asociados Desaprobados</h2>
 
-<form asp-action="Pendientes" method="post" class="mb-3">
+<form asp-action="Desaprobados" method="post" class="mb-3">
     <div class="row">
         <div class="col-md-4">
             <label>Desde:</label>
@@ -51,7 +51,7 @@
             @for (int i = 1; i <= totalPaginas; i++)
             {
                 <li class="page-item @(i == paginaActual ? "active" : "")">
-                    <form asp-action="Pendientes" method="post" class="d-inline">
+                    <form asp-action="Desaprobados" method="post" class="d-inline">
                         @if (desde.HasValue)
                         {
                             <input type="hidden" name="desde" value="@desde.Value.ToString("yyyy-MM-dd")" />
