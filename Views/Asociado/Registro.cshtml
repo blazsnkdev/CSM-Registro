@@ -42,10 +42,20 @@
                 <input asp-for="Dni" class="form-control" />
                 <span asp-validation-for="Dni" class="text-danger"></span>
             </div>
+            @* <div class="form-group">
+                <label asp-for="Nacionalidad" class="control-label"></label>
+                <input asp-for="Nacionalidad" class="form-control" />
+                <span asp-validation-for="Nacionalidad" class="text-danger"></span>
+            </div> *@
             <div class="form-group">
-                <label asp-for="Pais" class="control-label"></label>
-                <input asp-for="Pais" class="form-control" />
-                <span asp-validation-for="Pais" class="text-danger"></span>
+                <label asp-for="LibretaMilitar" class="control-label"></label>
+                <input asp-for="LibretaMilitar" class="form-control" />
+                <span asp-validation-for="LibretaMilitar" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumeroRuc" class="control-label"></label>
+                <input asp-for="NumeroRuc" class="form-control" />
+                <span asp-validation-for="NumeroRuc" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Departamento" class="control-label"></label>
@@ -98,9 +108,19 @@
                 <span asp-validation-for="Nacionalidad" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="EstadoCivil" class="control-label"></label>
+                <input asp-for="EstadoCivil" class="form-control" />
+                <span asp-validation-for="EstadoCivil" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="NivelInstruccion" class="control-label"></label>
                 <input asp-for="NivelInstruccion" class="form-control" />
                 <span asp-validation-for="NivelInstruccion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="FotoAsociado">Subir Foto DNI</label>
+                <input type="file" name="FotoAsociado" class="form-control" accept="image/*" />
+                <span asp-validation-for="FotoAsociado" class="text-danger"></span>
             </div>
             @* <div class="form-group">
                 <label asp-for="FechaRegistro" class="control-label"></label>
@@ -112,6 +132,7 @@
                 <input type="file" name="FotoVoucher" class="form-control" accept="image/*" />
                 <span asp-validation-for="FotoVoucher" class="text-danger"></span>
             </div>
+            <br />
             @* <div class="form-group">
                 <label asp-for="Estado" class="control-label"></label>
                 <input asp-for="Estado" class="form-control" />
@@ -122,6 +143,53 @@
                 <input asp-for="FechaAprobado" class="form-control" />
                 <span asp-validation-for="FechaAprobado" class="text-danger"></span>
             </div> *@
+            <h4>Datos del Cónyuge</h4>
+            <div class="form-group">
+                <label asp-for="Conyuge.Nombre" class="control-label"></label>
+                <input asp-for="Conyuge.Nombre" class="form-control" />
+                <span asp-validation-for="Conyuge.Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Conyuge.ApellidoPaterno" class="control-label"></label>
+                <input asp-for="Conyuge.ApellidoPaterno" class="form-control" />
+                <span asp-validation-for="Conyuge.ApellidoPaterno" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Conyuge.ApellidoMaterno" class="control-label"></label>
+                <input asp-for="Conyuge.ApellidoMaterno" class="form-control" />
+                <span asp-validation-for="Conyuge.ApellidoMaterno" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Conyuge.Dni" class="control-label"></label>
+                <input asp-for="Conyuge.Dni" class="form-control" />
+                <span asp-validation-for="Conyuge.Dni" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Conyuge.FechaNacimiento" class="control-label"></label>
+                <input asp-for="Conyuge.FechaNacimiento" type="date" class="form-control" />
+                <span asp-validation-for="Conyuge.FechaNacimiento" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Conyuge.Estudios" class="control-label"></label>
+                <input asp-for="Conyuge.Estudios" class="form-control" />
+                <span asp-validation-for="Conyuge.Estudios" class="text-danger"></span>
+            </div>
+
+
+            <h4>Datos de Hijos</h4>
+            <div class="form-control" id="hijos">
+                <div class="hijo form-group border p-2 mb-2">
+                    <input name="Hijos[0].Nombre" placeholder="Nombre" class="form-control mb-1" />
+                    <input name="Hijos[0].Dni" placeholder="DNI" class="form-control mb-1" />
+                    <input name="Hijos[0].Genero" placeholder="Género" class="form-control mb-1" />
+                    <input name="Hijos[0].FechaNacimiento" type="date" placeholder="Fecha de Nacimiento" class="form-control mb-1" />
+                    <input name="Hijos[0].Estudios" placeholder="Estudios" class="form-control mb-1" />
+                </div>
+            </div>
+
+            <button type="button" id="addHijo" class="btn btn-secondary mt-2">Agregar Hijo</button>
+
+
             <br />
             <div class="form-group">
                 <input type="submit" value="Enviar" class="btn btn-primary" />
@@ -131,7 +199,22 @@
 </div>
 
 
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        let index = 1;
+
+        document.getElementById('addHijo').addEventListener('click', function () {
+            const div = document.createElement('div');
+            div.className = 'hijo form-group border p-2 mb-2';
+            div.innerHTML = `
+                <input name="Hijos[${index}].Nombre" placeholder="Nombre" class="form-control mb-1" />
+                <input name="Hijos[${index}].Dni" placeholder="DNI" class="form-control mb-1" />
+                <input name="Hijos[${index}].Genero" placeholder="Género" class="form-control mb-1" />
+                <input name="Hijos[${index}].FechaNacimiento" type="date" placeholder="Fecha de Nacimiento" class="form-control mb-1" />
+                <input name="Hijos[${index}].Estudios" placeholder="Estudios" class="form-control mb-1" />
+            `;
+            document.getElementById('hijos').appendChild(div);
+            index++;
+        });
+    </script>
 }

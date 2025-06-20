@@ -4,7 +4,7 @@ namespace CSM_Registro.Services.Interface
 {
     public interface IAsociadoService
     {
-        Task<bool> RegistrarAsociado (Asociado asociado, IFormFile fotoVoucher);
+        Task<bool> RegistrarAsociado (Asociado asociado, IFormFile fotoVoucher, IFormFile fotoAsociado);
         Task<List<Asociado>> ObtenerAsociados();
 
         Task<List<Asociado>> ListarPendientesPaginado(DateTime? desde, DateTime? hasta, int pagina = 1);

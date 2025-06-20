@@ -38,9 +38,9 @@ namespace CSM_Registro.Models
         [StringLength(8, MinimumLength = 8, ErrorMessage = "El DNI debe tener 8 dígitos.")]
         public string Dni { get; set; }
 
-        [Required]
-        [Display(Name = "País")]
-        public string Pais { get; set; }
+        //[Required]
+        //[Display(Name = "País")]
+        //public string Pais { get; set; }
 
         [Required]
         [Display(Name = "Departamento")]
@@ -81,10 +81,14 @@ namespace CSM_Registro.Models
         [Required]
         [Display(Name = "Nacionalidad")]
         public string Nacionalidad { get; set; }
+        public string EstadoCivil { get; set; }
 
         [Required]
         [Display(Name = "Nivel de Instrucción")]
         public string NivelInstruccion { get; set; }
+        public string LibretaMilitar { get; set; }
+        public string NumeroRuc { get; set; }
+        public string? FotoAsociado { get; set; }
 
         [Display(Name = "Fecha de Registro")]
         public DateTime FechaRegistro { get; set; }
@@ -99,5 +103,9 @@ namespace CSM_Registro.Models
         [Display(Name = "Fecha de Aprobación")]
         [DataType(DataType.Date)]
         public DateTime? FechaAprobado { get; set; }
+
+        public Conyuge? Conyuge { get; set; }
+        public List<Hijo?> Hijos { get; set; } = new ();
+        
     }
 }

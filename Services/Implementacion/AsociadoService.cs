@@ -105,11 +105,15 @@ namespace CSM_Registro.Services.Implementacion
             throw new NotImplementedException();
         }
 
-        public async Task<bool> RegistrarAsociado(Asociado asociado, IFormFile fotoVoucher)
+        public async Task<bool> RegistrarAsociado(Asociado asociado, IFormFile fotoVoucher,IFormFile fotoAsociado)
         {
             if (fotoVoucher == null || fotoVoucher.Length == 0)
             {
                 return false; 
+            }
+            if (fotoAsociado == null || fotoAsociado.Length == 0)
+            {
+                return false;
             }
 
             using (var ms = new MemoryStream())
@@ -121,10 +125,20 @@ namespace CSM_Registro.Services.Implementacion
 
                 asociado.FotoVoucher = $"data:{contentType};base64,{base64}";
             }
-
+            using (var ms = new MemoryStream())
+            {
+                await fotoAsociado.CopyToAsync(ms);
+                var bytes = ms.ToArray();
+                string base64 = Convert.ToBase64String(bytes);
+                string contentType = fotoAsociado.ContentType;
+                asociado.FotoAsociado = $"data:{contentType};base64,{base64}";
+            }
             asociado.FechaRegistro = DateTime.UtcNow;
             asociado.Estado = "Pendiente";
             asociado.FechaAprobado = null;
+            
+            
+
 
             await _mongoDb.AddAsync(asociado);
             return true;

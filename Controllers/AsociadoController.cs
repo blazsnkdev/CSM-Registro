@@ -16,12 +16,12 @@ namespace CSM_Registro.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Registro(Asociado asociado, IFormFile fotoVoucher)
+        public async Task<IActionResult> Registro(Asociado asociado, IFormFile fotoVoucher, IFormFile fotoAsociado)
         {
 
             try
             {
-                await _asociadoService.RegistrarAsociado(asociado, fotoVoucher);
+                await _asociadoService.RegistrarAsociado(asociado, fotoVoucher,fotoAsociado);
                 TempData["Asociado"] = $"Asociado {asociado.NombreAsociado} Registrado";
                 return RedirectToAction("Confirmacion");
             }
@@ -138,8 +138,6 @@ namespace CSM_Registro.Controllers
             }
             return RedirectToAction("Pendientes");
         }
-
-
 
 
 
